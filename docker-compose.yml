@@ -1,6 +1,8 @@
 version: '3.1'
 services:
   casdoor:
+    env_file:
+      - .env
     restart: always
     build:
       context: ./
@@ -10,18 +12,18 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - postgres
     environment:
       RUNNING_IN_DOCKER: "true"
     volumes:
       - ./conf:/conf/
-  db:
+  postgres:
     restart: always
-    image: mysql:8.0.25
+    image: postgres:16
     platform: linux/amd64
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-    volumes:
-      - /usr/local/docker/mysql:/var/lib/mysql
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: casdoor
